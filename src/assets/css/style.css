@@ -1,0 +1,6 @@
+@charset "UTF-8";
+/* 用$開頭設定scss變數 */
+/* 使用scss設定的變數 */
+body {
+  background: red;
+}
