@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
+    <!-- Vue 3.0 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>新增訊息</title>
+
+</head>
+<body>
+<ul>
+    <li><a href="index.html">index</a></li>
+    <li><a href="demo.html">demo</a></li>
+    <li><a href="convertMoney.html">convertMoney</a></li>
+    <li><a href="directive.html">directive指令</a></li>
+    <li><a href="event.html">directive事件</a></li>
+    <li><a href="ifShowFor.html">v-if,v-show,v-for</a></li>
+    <li><a href="lifeCycle.html">lifeCycle</a></li>
+    <li><a href="addToMessage.html">新增訊息</a></li>
+</ul>
+<div id="app">
+    <p>
+        messages: {{ messages }}
+    </p>
+
+    <p>
+        scrollHeight: {{ scrollHeight }} <br>
+        DOM 實際的 scrollHeight: {{ realScrollHeight }}
+    </p>
+
+    <div class="messages">
+        <div v-for="m in messages">{{ m }}</div>
+    </div>
+
+    <input type="text" placeholder="輸入任意文字後按下 enter 鍵" v-model.trim="msg" @keydown.enter="addToMessages">
+</div>
+
+<script>
+    const vm = Vue.createApp({
+        data: () => {
+            return {
+                msg: '',
+                scrollHeight: 0,
+                realScrollHeight: 0,
+                messages: ['Hello', 'Vue.js', '好棒棒']
+            }
+        },
+        methods: {
+            addToMessages() {
+                this.messages.push(this.msg);
+                this.msg = '';
+
+                const el = document.querySelector('.messages');
+                this.scrollHeight = el.scrollHeight;
+                el.scrollTop = el.scrollHeight;
+
+                this.$nextTick(() => {
+                    this.realScrollHeight = el.scrollHeight;
+                });
+            }
+        },
+        mounted() {
+            const el = document.querySelector('.messages');
+            this.realScrollHeight = el.scrollHeight;
+            this.scrollHeight = el.scrollHeight;
+        }
+    });
+
+
+    vm.mount('#app');
+</script>
+<style lang="scss">
+  #app {
+    display: block;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 1rem 0;
+  }
+
+  .messages {
+    padding: 6px 10px;
+    width: 92%;
+    height: 4.5rem;
+    margin-bottom: 1rem;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+  }
+
+  input[type="text"] {
+    width: 93%;
+    height: 1.2rem;
+    padding: 3px;
+  }
+</style>
+
+</body>
+</html>

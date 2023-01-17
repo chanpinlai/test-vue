@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
+    <!-- Vue 3.0 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>event事件處理</title>
+
+</head>
+<body>
+<ul>
+    <li><a href="index.html">index</a></li>
+    <li><a href="demo.html">demo</a></li>
+    <li><a href="convertMoney.html">convertMoney</a></li>
+    <li><a href="directive.html">directive指令</a></li>
+    <li><a href="event.html">event事件處理</a></li>
+    <li><a href="ifShowFor.html">v-if,v-show,v-for</a></li>
+    <li><a href="lifeCycle.html">lifeCycle</a></li>
+    <li><a href="addToMessage.html">新增訊息</a></li>
+</ul>
+<div id="app">
+    <hr>
+    <p><b>v-if,v-show</b></p>
+    <label>
+        <input type="checkbox" v-model="isShow"> isShow: {{ isShow }}
+    </label>
+    <div class="wrap">
+        <div v-if="isShow"> V-if</div>
+        <div v-show="isShow"> V-show</div>
+    </div>
+    <hr>
+    <p><b>v-if,v-else-if,v-else</b></p>
+    <h4>count: {{ count }}</h4>
+    <button @click="count++">Plus</button>
+    <button @click="count = 0">Reset</button>
+
+    <div class="wrap">
+        <div v-if="count === 0" style="background-color: #f00;">v-if</div>
+        <div v-else-if="count < 5" style="background-color: green">v-else-if</div>
+        <div v-else style="background-color: #00f;">v-else</div>
+    </div>
+    <hr>
+    <p><b>v-for</b></p>
+    <ul>
+        <li v-for="item in arr">{{ item }}</li>
+    </ul>
+    <ul>
+        <li v-for="(item,index) in arr">{{ index }}/{{ item }}</li>
+    </ul>
+    <ul>
+        <li v-for="(val, key, index) in book">
+            {{ index }} / {{ key }} / {{ val }}
+        </li>
+    </ul>
+    <hr>
+    <p><b>pagination</b></p>
+    <ul class="pagination">
+        <li class="page-item" @click.prevent><a class="page-link" href>&lt;</a></li>
+        <li class="page-item" v-for="page in 10" @click.prevent>
+            <a class="page-link" href>{{ page }}</a>
+        </li>
+        <li class="page-item" @click.prevent><a class="page-link" href>&gt;</a></li>
+    </ul>
+    <hr>
+    <p><b>evenNumbers</b></p>
+    <div class="block" v-for="i in evenNumbers">
+        {{ i }}
+    </div>
+    <hr>
+    <p><b>v-for :key</b></p>
+    <div class="wrap">
+        <div class="todo-lists">
+            <h3>Todo List</h3>
+            <ul>
+                <li v-for="i in todoLists" :key="i.id">
+                    <label><input v-model="i.isDone" type="checkbox"> {{ i.title }}</label>
+                </li>
+            </ul>
+        </div>
+
+        <div class="done-lists">
+            <h3>Done List</h3>
+            <ul>
+                <li v-for="i in doneLists" :key="i.id">
+                    <label><input v-model="i.isDone" type="checkbox"> {{ i.title }}</label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    const vm = Vue.createApp({
+        data() {
+            return {
+                isShow: true,
+                count: 0,
+                arr: ['008', 'JS', 'is', 'awesome'],
+                book: {
+                    title: '08js',
+                    author: 'Kuro',
+                    publishedAt: '2019/09'
+                },
+                numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                lists: [{
+                    id: 'task001',
+                    title: '選項 1',
+                    isDone: false
+                },
+                    {
+                        id: 'task002',
+                        title: '選項 2',
+                        isDone: false
+                    },
+                    {
+                        id: 'task003',
+                        title: '選項 3',
+                        isDone: false
+                    },
+                ]
+            }
+        },
+        computed: {
+            // 只顯示偶數
+            evenNumbers() {
+                return this.numbers.filter(number => number % 2 === 0);
+            },
+            //複製一份新的陣列再進行排序
+            sortedNumbers() {
+                return [...this.numbers].sort((a, b) => b - a);
+            },
+            todoLists() {
+                return this.lists.filter(d => !d.isDone)
+            },
+            doneLists() {
+                return this.lists.filter(d => d.isDone)
+            },
+        },
+        methods: {},
+        watch: {}
+    }).mount('#app');
+</script>
+<style lang="scss">
+  #app {
+    display: block;
+    padding: 1rem;
+  }
+
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  button {
+    margin-right: 1em;
+  }
+
+  .wrap {
+    display: block;
+    overflow: hidden;
+    margin-top: 2rem;
+
+    div {
+      float: left;
+      margin-right: 2rem;
+      display: block;
+      width: 100px;
+      height: 100px;
+      line-height: 100px;
+      text-align: center;
+      color: #fff;
+      font-size: 1rem;
+    }
+  }
+
+  a {
+    color: #3eaf7c;
+    text-decoration: none;
+  }
+
+  .pagination {
+    display: block;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .page-item {
+    cursor: pointer;
+    font-size: 1rem;
+    list-style: none;
+    display: block;
+    width: 40px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border: 1px solid #c4ead9;
+    color: #3eaf7c;
+    float: left;
+    margin: 0;
+    margin-right: -1px;
+
+    &:hover {
+      background-color: #eee;
+    }
+  }
+  .todo-lists, .done-lists {
+    display: block;
+    max-width: 150px;
+    width: 45%;
+    height: 120px;
+    margin-right: 4%;
+    float: left;
+    border: 1px solid #ccc;
+    padding: 1rem;
+  }
+
+  li {
+    margin-bottom: 5px;
+  }
+</style>
+</body>
+</html>

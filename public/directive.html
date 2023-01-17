@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
+    <!-- Vue 3.0 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>directive指令</title>
+
+</head>
+<body>
+<ul>
+    <li><a href="index.html">index</a></li>
+    <li><a href="demo.html">demo</a></li>
+    <li><a href="convertMoney.html">convertMoney</a></li>
+    <li><a href="directive.html">directive指令</a></li>
+    <li><a href="event.html">event事件</a></li>
+    <li><a href="lifeCycle.html">lifeCycle</a></li>
+    <li><a href="addToMessage.html">新增訊息</a></li>
+</ul>
+<div id="app">
+    <button :disabled="isBtnDisabled">click me!</button>
+    <hr>
+    <p>Message is: {{ message }}</p>
+    <input v-model="message" placeholder="edit me">
+    <hr>
+    <p><span>Multiline message is:</span> {{ messageTextarea }}</p>
+    <textarea v-model="messageTextarea" placeholder="add multiple lines"></textarea>
+    <hr>
+    <!-- 要注意下面兩組 input 對應的都是 v-model="picked" -->
+    <div><input type="radio" id="one" value="1" v-model="picked"> <label for="one">One</label></div>
+    <div><input type="radio" id="two" value="2" v-model="picked"> <label for="two">Two</label></div>
+    <span>Picked: {{ picked }}</span>
+    <hr>
+    <!-- 注意下面 input 對應的都是 v-model="checkedNames" -->
+    <input type="checkbox" id="jack" value="Jack" v-model="checkedNames"> <label for="jack">Jack</label>
+    <input type="checkbox" id="john" value="John" v-model="checkedNames"> <label for="john">John</label>
+    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames"> <label for="mike">Mike</label>
+    <input type="checkbox" id="mary" value="Mary" v-model="checkedNames"> <label for="mary">Mary</label>
+    <input type="checkbox" id="checkbox" v-model="checked" @change="changeAllChecked()">
+    <label for="checkbox">全选：{{ checked }}</label>
+    <br>
+    <p>Checked names: {{ checkedNames }}</p>
+    <hr>
+    <div id="app">
+        <input type="checkbox" id="checkbox" v-model="isChecked">
+        <label for="checkbox">Status: {{ isChecked }}</label>
+    </div>
+    <hr>
+    <!-- 注意，v-model 要放在 select 而不是 option -->
+    <select v-model="selected">
+        <option disabled value="">請選擇</option>
+        <option>台北市</option>
+        <option>新北市</option>
+        <option>基隆市</option>
+    </select>
+    <p>Selected: {{ selected || '未選擇' }}</p>
+    <hr>
+    <p>.lazy</p>
+    像這樣在 v-model 後面加上 .lazy，這個 input 輸入框就會從原本的 input 事件改為監聽 change 事件， 換句話說，就會在使用者離開輸入框焦點時才會更新 data 內容。
+    <input v-model.lazy="messageLazy" placeholder="edit me">
+    <p>Message with ".lazy" : {{ messageLazy }}</p>
+    <hr>
+    <p>.number</p>
+    在 input 輸入框當中，即便我們輸入的都是數字，但實際上由 DOM API 取出的時候都會是以「字串」的形式出現。 假設我們今天想要做到兩個輸入框內容的數字相加，
+        最簡單的方式可以這樣寫：
+    <input v-model.number="num1"> +
+    <input v-model.number="num2"> = {{ sum }}
+    <hr>
+    <p>.trim</p>
+    如果我們想要針對某個輸入框自動過濾前後的空白字元時，就可以在 v-model 後面加上 .trim 修飾子：
+    <input v-model.trim="messageTrim" placeholder="edit me">
+    <p>Message with ".trim" is: {{ messageTrim }}</p>
+    <hr>
+    <p>CSS 樣式的綁定</p>
+    Edit: <input
+        type="text"
+        v-model.trim="messageCSS"
+        placeholder="請勿超過十個字"
+        :style="msgStyle">
+</div>
+<script>
+    const vm = Vue.createApp({
+        data() {
+            return {
+                isChecked: false,
+                checked: false,
+                isBtnDisabled: true,
+                message: "hello",
+                messageTextarea: "hello",
+                picked: 1,
+                checkedNames: [],
+                checkedArr: ["Jack", "John", "Mike", "Mary"],
+                selected: '',
+                messageLazy:'messageLazy',
+                num1: 0,
+                num2: 0,
+                messageTrim:'',
+                messageCSS:'',
+
+            }
+        },
+        computed: {
+            sum() {
+                return this.num1 + this.num2;
+            },
+            isVaild() {
+                return this.messageCSS.length <= 10;
+            },
+            msgStyle() {
+                return {
+                    'border': this.isVaild ? '' : 'red solid 1px',
+                    'color': this.isVaild ? '' : 'red'
+                };
+            }
+        },
+        methods: {
+            changeAllChecked() {
+                if (this.checked) {
+                    this.checkedNames = this.checkedArr;
+                } else {
+                    this.checkedNames = []
+                }
+            }
+        },
+        watch: {
+            checkedNames(val) {
+                if (val.length == this.checkedArr.length) {
+                    this.checked = true
+                } else {
+                    this.checked = false
+                }
+            }
+        }
+    }).mount('#app');
+</script>
+
+</body>
+</html>

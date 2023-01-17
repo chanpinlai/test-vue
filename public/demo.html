@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
+    <!-- Vue 3.0 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <!--    <script src="lib/vue.global.js"></script>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>demo</title>
+</head>
+<body>
+<ul>
+    <li><a href="index.html">index</a></li>
+    <li><a href="demo.html">demo</a></li>
+    <li><a href="convertMoney.html">convertMoney</a></li>
+    <li><a href="directive.html">directive</a></li>
+    <li><a href="event.html">event</a></li>
+    <li><a href="ifShowFor.html">v-if,v-show,v-for</a></li>
+    <li><a href="lifeCycle.html">lifeCycle</a></li>
+    <li><a href="addToMessage.html">新增訊息</a></li>
+</ul>
+<div id="demo">
+    <h1>{{ message }}</h1>
+    <input v-model="message">
+    <hr>
+    單價：{{ price }},
+    數量：{{ quantity }},
+    總金額：{{ price * quantity }},
+    subtotalComputed：{{ subtotalComputed }},
+    subtotalMethods：{{ subtotalMethods() }},
+    <hr>
+
+
+</div>
+#template 模板屬性
+<div id="app">
+
+</div>
+<script>
+    const vm = Vue.createApp({
+        data() {
+            return {
+                price: 100,
+                quantity: 10,
+                message: "Hello Vue!"
+            }
+        },
+        computed: {
+            subtotalComputed: function () {
+                return this.price * this.quantity;
+            }
+        },
+        methods: {
+            subtotalMethods() {
+                return this.price * this.quantity;
+            }
+        }
+    }).mount('#demo');
+    const app = Vue.createApp({
+        template: '<div>{{greeting}}好棒棒!</div>',
+        data() {
+            return {
+                greeting: "LCB",
+            }
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
