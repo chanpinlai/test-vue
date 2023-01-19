@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico"/>
+    <!-- Vue 3.0 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <!--    <script src="lib/vue.global.js"></script>-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>demo</title>
+</head>
+<body>
+<ul>
+    <li><a href="index.html">index</a></li>
+    <li><a href="demo.html">demo</a></li>
+    <li><a href="convertMoney.html">convertMoney</a></li>
+    <li><a href="directive.html">directive</a></li>
+    <li><a href="event.html">event</a></li>
+    <li><a href="ifShowFor.html">v-if,v-show,v-for</a></li>
+    <li><a href="lifeCycle.html">lifeCycle</a></li>
+    <li><a href="addToMessage.html">新增訊息</a></li>
+    <li><a href="component.html">元件特性</a></li>
+</ul>
+
+<div id="app">
+    <p>不共用變數</p>
+    <my-component></my-component>
+    <my-component></my-component>
+    <my-component></my-component>
+    <my-component></my-component>
+    <hr>
+    <p>共用變數$data</p>
+    <my-component2></my-component2>
+    <my-component2></my-component2>
+    <my-component2></my-component2>
+    <my-component2></my-component2>
+</div>
+<script>
+    const app = Vue.createApp({ });
+
+
+    app.component('my-component', {
+        template: `
+  <div class="data-block">
+    <div>Count: {{ count }}</div>
+    <button @click="count++">Plus</button>
+	</div>
+  `,
+        data () {
+            return {
+                count: 0
+            }
+        }
+    });
+    // 共用的狀態
+    const $data = {
+        count: 0
+    };
+
+
+    app.component('my-component2', {
+        template: `
+	  <div class="data-block">
+	    <div>Count: {{ count }}</div>
+  	  <button @click="count++">Plus</button>
+		</div>
+  `,
+        data () {
+            return $data;
+        }
+    });
+
+    app.mount('#app');
+
+</script>
+<style lang="scss">
+  #app {
+    display: block;
+    padding: 1rem;
+    font-size: 1rem;
+  }
+
+  .data-block {
+    display: inline-block;
+    background-color: #f1f1f1;
+    padding: 1rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #aaa;
+    line-height: 2;
+    font-size: 1.2rem;
+
+    button {
+      font-size: 1.2rem;
+    }
+  }
+  a {
+    color: #3eaf7c;
+    text-decoration: none;
+  }
+
+</style>
+
+</body>
+</html>

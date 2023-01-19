@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg"/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico"/>
     <!-- Vue 3.0 -->
     <script src="https://unpkg.com/vue@next"></script>
     <title>directive指令</title>
@@ -20,6 +20,7 @@
     <li><a href="event.html">event事件</a></li>
     <li><a href="lifeCycle.html">lifeCycle</a></li>
     <li><a href="addToMessage.html">新增訊息</a></li>
+    <li><a href="component.html">元件特性</a></li>
 </ul>
 <div id="app">
     <button :disabled="isBtnDisabled">click me!</button>
@@ -137,6 +138,12 @@
         }
     }).mount('#app');
 </script>
+<style lang="scss">
+  a {
+    color: #3eaf7c;
+    text-decoration: none;
+  }
 
+</style>
 </body>
 </html>
