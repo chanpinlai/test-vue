@@ -8,7 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.ico"/>
     <!-- Vue 3.0 -->
     <script src="https://unpkg.com/vue@next"></script>
-    <title>convertMoney</title>
+    <title>v-model 與元件的雙向綁定 (Vue 3.x 新增)</title>
 
 </head>
 <body>
@@ -17,7 +17,7 @@
     <li><a href="demo.html">demo</a></li>
     <li><a href="convertMoney.html">convertMoney</a></li>
     <li><a href="directive.html">directive指令</a></li>
-    <li><a href="event.html">directive事件</a></li>
+    <li><a href="event.html">event事件處理</a></li>
     <li><a href="ifShowFor.html">v-if,v-show,v-for</a></li>
     <li><a href="lifeCycle.html">lifeCycle</a></li>
     <li><a href="addToMessage.html">新增訊息</a></li>
@@ -26,46 +26,59 @@
     <li><a href="parentChild2.html">父子元件2</a></li>
     <li><a href="propsEmit.html">v-model 與元件的雙向綁定 (Vue 3.x 新增)</a></li>
     <li><a href="provideInject.html">跨越層級的傳遞方式provide inject</a></li>
+
+
 </ul>
 <div id="app">
-    <p>假設, 1 日幣 = 0.278 台幣, 且 1 美金 = 28.540 台幣: </p>
-    <div>台幣 <input type="text" v-model="twd"></div>
-    <div>日幣 <input type="text" v-model="jpy"></div>
-    <div>美金 <input type="text" v-model="usd"></div>
+    <hr>
+    <h3>v-model 與元件的雙向綁定 (Vue 3.x 新增)</h3>
+    <h1>{{ message }}</h1>
+
+    <custom-input v-model="message"></custom-input>
 </div>
 <script>
-    const vm = Vue.createApp({
+    const app = Vue.createApp({
         data() {
             return {
-                twd: 1000
-            }
-        },
-        computed: {
-            jpy: {
-                get() {
-                    return Number.parseFloat(Number(this.twd) / 0.278).toFixed(3);
-                },
-                set(val) {
-                    this.twd = Number.parseFloat(Number(val) * 0.278).toFixed(3);
-                }
-            },
-            usd: {
-                get() {
-                    return Number.parseFloat(Number(this.twd) / 28.540).toFixed(3);
-                },
-                set(val) {
-                    this.twd = Number.parseFloat(Number(val) * 28.540).toFixed(3);
-                }
-            }
-
+                message: "Hello Vue!"
+            };
         }
-    }).mount('#app');
+    });
+
+
+    app.component("custom-input", {
+        props: ["modelValue"],
+        template: `<input :value="modelValue"
+                          @input="$emit('update:modelValue', $event.target.value)"
+        >`
+    });
+
+
+    app.mount("#app");
 </script>
 <style lang="scss">
+  #app {
+    display: block;
+    padding: 1rem;
+    padding-top: 2rem;
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  input {
+    font-size: 1.25rem;
+    padding: 5px;
+  }
+
   a {
     color: #3eaf7c;
     text-decoration: none;
   }
+
 
 </style>
 </body>

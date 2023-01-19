@@ -8,7 +8,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.ico"/>
     <!-- Vue 3.0 -->
     <script src="https://unpkg.com/vue@next"></script>
-    <title>convertMoney</title>
+    <title>跨越層級的傳遞方式provide inject</title>
 
 </head>
 <body>
@@ -17,7 +17,7 @@
     <li><a href="demo.html">demo</a></li>
     <li><a href="convertMoney.html">convertMoney</a></li>
     <li><a href="directive.html">directive指令</a></li>
-    <li><a href="event.html">directive事件</a></li>
+    <li><a href="event.html">event事件處理</a></li>
     <li><a href="ifShowFor.html">v-if,v-show,v-for</a></li>
     <li><a href="lifeCycle.html">lifeCycle</a></li>
     <li><a href="addToMessage.html">新增訊息</a></li>
@@ -28,44 +28,78 @@
     <li><a href="provideInject.html">跨越層級的傳遞方式provide inject</a></li>
 </ul>
 <div id="app">
-    <p>假設, 1 日幣 = 0.278 台幣, 且 1 美金 = 28.540 台幣: </p>
-    <div>台幣 <input type="text" v-model="twd"></div>
-    <div>日幣 <input type="text" v-model="jpy"></div>
-    <div>美金 <input type="text" v-model="usd"></div>
+    <input type="text" v-model="msg">
+
+    <list-component></list-component>
 </div>
+
 <script>
-    const vm = Vue.createApp({
+    const app = Vue.createApp({
         data() {
             return {
-                twd: 1000
+                msg: 'Hello App!'
             }
         },
-        computed: {
-            jpy: {
-                get() {
-                    return Number.parseFloat(Number(this.twd) / 0.278).toFixed(3);
-                },
-                set(val) {
-                    this.twd = Number.parseFloat(Number(val) * 0.278).toFixed(3);
-                }
-            },
-            usd: {
-                get() {
-                    return Number.parseFloat(Number(this.twd) / 28.540).toFixed(3);
-                },
-                set(val) {
-                    this.twd = Number.parseFloat(Number(val) * 28.540).toFixed(3);
-                }
-            }
-
+        provide() {
+            // 將 this.msg 透過 provide 傳遞出去
+            return {
+                provideMsg: this.msg,
+                provideMsg2: Vue.computed(() => this.msg)
+            };
         }
-    }).mount('#app');
+    });
+
+    app.component('list-component', {
+        template: `
+  	<ul>
+    	<li v-for="i in 3">
+      	{{ i }}
+     		<list-item />
+			</li>
+    </ul>`,
+        components: {
+            'list-item': {
+                // 在子、孫元件中，加上 inject 屬性即可取得 provideMsg
+                inject: ['provideMsg', 'provideMsg2'],
+                template: `
+      	<div>provideMsg: {{ provideMsg }}!</div>
+      	<div>provideMsg2: {{ provideMsg2.value }}!</div>
+			`
+            }
+        }
+    });
+
+    app.mount('#app');
 </script>
 <style lang="scss">
+  #app {
+    display: block;
+    padding: 1rem;
+    padding-top: 2rem;
+    font-size: 1rem;
+  }
+
+  input {
+    display: block;
+    font-size: 1rem;
+    padding: 5px;
+    margin-bottom: 1rem;
+    width: 350px;
+  }
+
+  li {
+    display: block;
+    width: 350px;
+    padding: 10px;
+    border: 1px solid #000;
+    margin-bottom: 1rem;
+  }
+
   a {
     color: #3eaf7c;
     text-decoration: none;
   }
+
 
 </style>
 </body>
