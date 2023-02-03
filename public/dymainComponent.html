@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico"/>
+    <!-- Vue 3.0 -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <title>動態元件管理</title>
+
+</head>
+<body>
+<script src="header.js"></script>
+<div id="app">
+    <button
+            v-for="tab in tabs"
+            :key="tab"
+            :class="['tab-button', { active: currentTab === tab }]"
+            @click="currentTab = tab"
+    >
+        {{ tab }}
+
+    </button>
+    <tab-home v-if="currentTab==='Home'"></tab-home>
+    <tab-post v-if="currentTab==='Post'"></tab-post>
+    <tab-archive v-if="currentTab==='Archive'"></tab-archive>
+</div>
+
+<script>
+    const app = Vue.createApp({
+        data() {
+            return {
+                currentTab: "Home",
+                tabs: ['Home', 'Post', 'Archive']
+            }
+        }
+    });
+    app.component('tab-home', {
+        template: `<div class="demo-tab">Home component</div>`
+    });
+    app.component('tab-post', {
+        template: `<div class="demo-tab">Post component</div>`
+    });
+    app.component('tab-Archive', {
+        template: `<div class"demo-tab">Archive component</div>`
+    });
+    app.mount('#app');
+</script>
+<style lang="scss">
+  #app {
+    font-family: sans-serif;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    padding: 20px 30px;
+    margin-top: 1em;
+    margin-bottom: 40px;
+    user-select: none;
+    overflow-x: auto;
+  }
+
+  .tab-button {
+    padding: 6px 10px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    background: #f0f0f0;
+    margin-bottom: -1px;
+    margin-right: -1px;
+  }
+
+  .tab-button:hover {
+    background: #e0e0e0;
+  }
+
+  .tab-button.active {
+    background: #e0e0e0;
+  }
+
+  .demo-tab {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+
+  .dynamic-component-demo-posts-tab {
+    li {
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>
+</body>
+</html>
